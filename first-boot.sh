@@ -5,7 +5,7 @@ if [[ $# -eq 0 ]]; then
 	exit
 else
 	echo "Dependency Install"
-	for i in transmission xclip openssh-askpass patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
+	for i in pulseaudio pavucontrol transmission xclip openssh-askpass patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
 
 	echo "Vim Solarized Install"
 	mkdir -p /home/$1/.vim/colors/
