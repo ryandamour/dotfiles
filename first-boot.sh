@@ -1,11 +1,11 @@
-!/bin/bash
+#!/bin/bash
 
-if [[ $# -eq 0 ]]; then
+if [[ $ -eq 0 ]]; then
 	echo "Use username as 1st argument"
 	exit
 else
 	echo "Dependency Install"
-	for i in patch sway mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
+	for i in patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
 
 	echo "Vim Solarized Install"
 	mkdir -p /home/$1/.vim/colors/
@@ -27,7 +27,7 @@ else
 	echo "nouveau modeset=0" >> /etc/modprobe.d/disable-nouveau.conf
 	sed -i "s/quiet/quiet rd.driver.blacklist=nouveau/" /etc/sysconfig/grub
 	grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-	# Temporary 4.10 Nvidia Patch
+	 Temporary 4.10 Nvidia Patch
 	cd /usr/local/src && ./NVIDIA-Linux-x86_64-375.39.run -x
 	cd NVIDIA-Linux-x86_64*
 	curl -O https://gist.githubusercontent.com/akofink/1024ad239e47e2e1b9d00286c4e3200b/raw/e50551a33556ade4c4b18e8f48d59971f1a055c6/kernel_4.10.patch	
@@ -54,3 +54,4 @@ else
 	
 	echo "Fix Permission"
 	chown -R $1:$1 /home/$1
+fi
