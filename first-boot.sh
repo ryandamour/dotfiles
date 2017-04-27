@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Dependency Install"
-for i in i3 mutt vim firefox ansible git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice; do dnf -y install $i; done
+for i in sway mutt vim firefox ansible git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice; do dnf -y install $i; done
 
 echo "Vim Solarized Install"
 mkdir -p ~/.vim/colors/
