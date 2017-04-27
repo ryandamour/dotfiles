@@ -1,6 +1,12 @@
 Current Setup:
 
-FC25__
-i3 + urxvt__
-Solarized vim__
-Nvidia / 4.10 kernel patch__
+FC25
+
+
+i3 + urxvt
+
+
+Solarized vim
+
+
+Nvidia / 4.10 kernel patch
