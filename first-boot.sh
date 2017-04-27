@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [[ $ -eq 0 ]]; then
+if [[ $# -eq 0 ]]; then
 	echo "Use username as 1st argument"
 	exit
 else
 	echo "Dependency Install"
-	for i in patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
+	for i in tranmission xclip openssh-askpass patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++; do dnf -y install $i; done
 
 	echo "Vim Solarized Install"
 	mkdir -p /home/$1/.vim/colors/
@@ -39,9 +39,9 @@ else
 	rpm -Uvh /usr/local/src/rpmfusion-free-release-25.noarch.rpm
 	rpm -Uvh /usr/local/src/rpmfusion-nonfree-release-25.noarch.rpm
 
-	echo "Install Steam"
-	dnf -y install steam
-	
+	echo "Install RpmFusion Applications"
+	dnf -y install steam vlc
+
 	echo "Run First-Boot Updates"
 	dnf -y update
 
@@ -51,7 +51,14 @@ else
 	echo "URxvt.keysym.Control-Down:    \033[1;5B" >> /home/$1/.Xdefaults
 	echo "URxvt.keysym.Control-Left:    \033[1;5D" >> /home/$1/.Xdefaults
 	echo "URxvt.keysym.Control-Right:    \033[1;5C" >> /home/$1/.Xdefaults
-	
+
+	echo "Control+Shift+c/v for Copy/Paste"
+	cp clipboard /usr/lib64/urxvt/perl/
+	echo "!! Add Control+Shift+c/v for Copy/Paste" >> /home/$1/.Xdefaults
+	echo "URxvt.keysym.Shift-Control-V: perl:clipboard:paste" >> /home/$1/.Xdefaults
+	echo "URxvt.iso14755: False" >> /home/$1/.Xdefaults
+	echo "URxvt.perl-ext-common: default,clipboard" >> /home/$1/.Xdefaults
+
 	echo "Fix Permission"
 	chown -R $1:$1 /home/$1
 fi
