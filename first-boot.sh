@@ -27,7 +27,7 @@ else
 	echo "nouveau modeset=0" >> /etc/modprobe.d/disable-nouveau.conf
 	sed -i "s/quiet/quiet rd.driver.blacklist=nouveau/" /etc/sysconfig/grub
 	grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-	 Temporary 4.10 Nvidia Patch
+	#Temporary 4.10 Nvidia Patch
 	cd /usr/local/src && ./NVIDIA-Linux-x86_64-375.39.run -x
 	cd NVIDIA-Linux-x86_64*
 	curl -O https://gist.githubusercontent.com/akofink/1024ad239e47e2e1b9d00286c4e3200b/raw/e50551a33556ade4c4b18e8f48d59971f1a055c6/kernel_4.10.patch	
