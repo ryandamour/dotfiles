@@ -9,13 +9,10 @@ else
 	echo "Dependency Install"
 	for i in pulseaudio pavucontrol transmission xclip openssh-askpass patch i3 mutt vim firefox ansible wget git pip pip3 libvirt virt-manager qemu-kvm kernel-devel kernel-headers docker gcc dkms acpid gpg keepassx shutter libreoffice xorg-x11-drv-evdev xorg-x11-server-Xorg xorg-x11-xinit gcc gcc-c++ polkit-gnome; do dnf -y install $i; done
 
-	echo "Vim Solarized Install"
-	mkdir -p /home/$1/.vim/colors/
-	/usr/bin/wget -O /home/$1/.vim/colors/solarized.vim https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-	
-	echo "urvxt Solarized Install"
-	wget -O /home/$1/.Xdefaults https://gist.githubusercontent.com/yevgenko/1167205/raw/12d26d2c65d991850796c708fb737dd8a453de8b/.Xdefaults
-	
+	echo "Install dracula vim"
+        mkdir -p $1/.vim/colors/
+        curl https://raw.githubusercontent.com/dracula/vim/master/colors/dracula.vim > $1/.vim/colors/dracula.vim	
+
 	echo "HangUps Install"
 	sudo /usr/bin/pip3 install hangups
 
@@ -49,20 +46,12 @@ else
 
 	echo "Run First-Boot Updates"
 	dnf -y update
+        
+	echo "Xdefaults config" 
+        cat .Xdefaults > $1/.Xdefaults
 
-	echo "Fix Vim Arrow Mappings"
-	echo "!! Fix Control+Arrow Key Mapping" >> /home/$1/.Xdefaults 
-	echo "URxvt.keysym.Control-Up:   \033[1;5A" >> /home/$1/.Xdefaults
-	echo "URxvt.keysym.Control-Down:    \033[1;5B" >> /home/$1/.Xdefaults
-	echo "URxvt.keysym.Control-Left:    \033[1;5D" >> /home/$1/.Xdefaults
-	echo "URxvt.keysym.Control-Right:    \033[1;5C" >> /home/$1/.Xdefaults
-
-	echo "Control+Shift+c/v for Copy/Paste"
-	cp clipboard /usr/lib64/urxvt/perl/
-	echo "!! Add Control+Shift+c/v for Copy/Paste" >> /home/$1/.Xdefaults
-	echo "URxvt.keysym.Shift-Control-V: perl:clipboard:paste" >> /home/$1/.Xdefaults
-	echo "URxvt.iso14755: False" >> /home/$1/.Xdefaults
-	echo "URxvt.perl-ext-common: default,clipboard" >> /home/$1/.Xdefaults
+	echo "i3 boot"
+        echo "exec i3" > $1/.xinitrc
 
 	echo "Fix Permission"
 	chown -R $1:$1 /home/$1
