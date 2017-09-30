@@ -1,12 +1,9 @@
 Current Setup:
 
-FC25
+FC26
 
+i3 + urxvt + Dracula theme
 
-i3 + urxvt
-
-
-Solarized vim
-
+Dracula Vim
 
 Nvidia / 4.10 kernel patch
