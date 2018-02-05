@@ -20,21 +20,30 @@ else
 	echo "gmusicapi Install"
 	sudo pip install gmusicapi
 	
-	if [[ $2 -eq "laptop" ]]; then
+	if [[ $2 = "laptop" ]]; then
             dnf -y install NetworkManager-wifi iwl7260-firmware 
 	fi
-	echo "RPMFusion Install"
-	wget -O /usr/local/src/rpmfusion-free-release-26.noarch.rpm https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-26.noarch.rpm
-	wget -O /usr/local/src/rpmfusion-nonfree-release-26.noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-26.noarch.rpm
-	rpm -Uvh /usr/local/src/rpmfusion-free-release-26.noarch.rpm
-	rpm -Uvh /usr/local/src/rpmfusion-nonfree-release-26.noarch.rpm
-
-	echo "Install RpmFusion Applications"
-	dnf -y install steam vlc
-
+	
 	echo "Run First-Boot Updates"
 	dnf -y update
+	
+	echo "Negativo17 Install"
+	dnf config-manager --add-repo=https://negativo17.org/repos/fedora-nvidia.repo
+	
+	echo "Install Nvidia drivers"
+	dnf install nvidia-driver kernel-devel akmod-nvidia dkms acpi
+	
+	echo "Enable bumblee"
+	dnf copr enable chenxiaolong/bumblebee
+	dnf install akmod-bbswitch bumblebee primus
+
+        echo "Make user part of bumblee group"
+	gpasswd -a $1 bumblebee
         
+	echo "enable bumblee / disable nvidia-fallback
+	ystemctl enable bumblebeed
+	systemctl disable nvidia-fallback
+	
 	echo "Xdefaults config" 
         cat .Xdefaults > $1/.Xdefaults
 
