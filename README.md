@@ -1,6 +1,6 @@
 Current Setup:
 
-FC26
+FC27
 
 i3 + urxvt + Dracula theme
 
