@@ -41,11 +41,11 @@ else
 	gpasswd -a $1 bumblebee
         
 	echo "enable bumblee / disable nvidia-fallback
-	ystemctl enable bumblebeed
+	systemctl enable bumblebeed
 	systemctl disable nvidia-fallback
 	
 	echo "Xdefaults config" 
-        cat .Xdefaults > $1/.Xdefaults
+        cp .Xdefaults > $1/.Xdefaults
 
 	echo "i3 boot"
         echo "exec i3" > $1/.xinitrc
