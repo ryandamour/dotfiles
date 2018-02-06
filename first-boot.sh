@@ -11,7 +11,7 @@ else
         dnf -y groupinstall base-x
 	
 	echo "Install dracula vim"
-        mkdir -p $1/.vim/colors/
+        mkdir -p /home/$1/.vim/colors/
         curl https://raw.githubusercontent.com/dracula/vim/master/colors/dracula.vim > $1/.vim/colors/dracula.vim	
 
 	echo "HangUps Install"
@@ -45,13 +45,13 @@ else
 	systemctl disable nvidia-fallback
 	
 	echo "Xdefaults config" 
-        cp .Xdefaults > $1/.Xdefaults
+        cp .Xdefaults > /home/$1/.Xdefaults
 	
 	echo "Move clipboard to /usr/lib64/urxvt/perl"
 	cp clipboard /usr/lib64/urxvt/perl
 
 	echo "i3 boot"
-        echo "exec i3" > $1/.xinitrc
+        echo "exec i3" > /home/$1/.xinitrc
 
 	echo "Fix Permission"
 	chown -R $1:$1 /home/$1
