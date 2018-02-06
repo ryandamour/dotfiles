@@ -46,6 +46,9 @@ else
 	
 	echo "Xdefaults config" 
         cp .Xdefaults > $1/.Xdefaults
+	
+	echo "Move clipboard to /usr/lib64/urxvt/perl"
+	cp clipboard /usr/lib64/urxvt/perl
 
 	echo "i3 boot"
         echo "exec i3" > $1/.xinitrc
