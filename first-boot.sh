@@ -27,25 +27,8 @@ else
 	echo "Run First-Boot Updates"
 	dnf -y update
 	
-	echo "Negativo17 Install"
-	dnf config-manager --add-repo=https://negativo17.org/repos/fedora-nvidia.repo
-	
-	echo "Install Nvidia drivers"
-	dnf install nvidia-driver kernel-devel akmod-nvidia dkms acpi
-	
-	echo "Enable bumblee"
-	dnf copr enable chenxiaolong/bumblebee
-	dnf install akmod-bbswitch bumblebee primus
-
-        echo "Make user part of bumblee group"
-	gpasswd -a $1 bumblebee
-        
-	echo "enable bumblee / disable nvidia-fallback
-	systemctl enable bumblebeed
-	systemctl disable nvidia-fallback
-	
 	echo "Xdefaults config" 
-        cp .Xdefaults > /home/$1/.Xdefaults
+        cp .Xdefaults /home/$1/.Xdefaults
 	
 	echo "Move clipboard to /usr/lib64/urxvt/perl"
 	cp clipboard /usr/lib64/urxvt/perl
