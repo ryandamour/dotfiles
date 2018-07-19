@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+  - name: Include vars
+    include_vars:
+      dir: vars
+  - name: Install Dependencies
+    dnf:
+      state: latest
+      name: "{{ item }}"
+    with_items:
+      - "{{ dependencies }}"
+  - name: Download dracula VIM
+    get_url:
+      url: "{{ dracula_url }}"
+      dest: /home/{{ user }}/.vim/colors
+      owner: "{{ user }}"
+      group: "{{ user }}"
+  - name: Download pip3 apps 
+    pip:
+      name: "{{ item }}"
+      executable: pip3
+    with_items:
+      - "{{ pip3_apps }}"
+  - name: Copy Xdefaults
+    copy:
+      src: .Xdefaults
+      dest: /home/{{ user }}/.Xdefaults
+      owner: "{{ user }}"
+      group: "{{ user }}"
+  - name: Copy i3 clipboard perl script
+    copy:
+      src: clipboard
+      dest: /usr/lib64/urxvt/perl/clipboard
+      owner: root
+      group: root
+  - name: Add exec i3 to .xinitrc
+    lineinfile:
+      path: /home/{{ user }}/.xinitrc
+      line: exec i3 
+      state: present
+      insertafter: EOF
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      create: True

@@ -1,0 +1,38 @@
+---
+dependencies:
+  - pulseaudio
+  - pavucontrol
+  - transmission
+  - xclip
+  - openssh-askpass
+  - libselinux-python
+  - patch
+  - i3
+  - mutt
+  - vim
+  - firefox
+  - ansible
+  - wget
+  - git
+  - libvirt
+  - virt-manager
+  - qemu-kvm
+  - kernel-devel
+  - kernel-headers
+  - docker
+  - gcc
+  - dkms
+  - acpid
+  - gpg
+  - keepassx
+  - shutter
+  - libreoffice
+  - xorg-x11-drv-evdev
+  - xorg-x11-server-Xorg
+  - xorg-x11-xinit
+  - gcc
+  - gcc-c++
+  - polkit-gnome
+user: hac
+dracula_url: "https://raw.githubusercontent.com/dracula/vim/master/colors/dracula.vim"
+pip3_apps: hangups
