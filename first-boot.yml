@@ -44,3 +44,24 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       create: True
+  - name: Install Laptop Dependencies
+    dnf:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - "{{ laptop_dependencies }}"
+    when: laptop
+  - name: Install Packer
+    unarchive:
+      src: "{{ packer_url }}" 
+      dest: /usr/local/bin/
+      remote_src: yes
+      owner: root
+      group: root
+  - name: Install Terraform 
+    unarchive:
+      src: "{{ vault_url }}"
+      dest: /usr/local/bin
+      remote_src: yes
+      owner: root
+      group: root
