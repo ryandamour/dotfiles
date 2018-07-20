@@ -108,11 +108,41 @@
   - name: Create new dracut initramfs image
     shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
     when: nouveau_grub.changed or iommu_grub.changed
+  - name: Enable official unofficial 3rd party repo
+    dnf:
+      name: fedora-workstation-repositories
+      state: latest
+  - name: CHeck official unofficial 3rd party repo 
+    command: rpm -q fedora-workstation-repositories
+    register: fedora_workstation_repositories
+  - name: Install steam
+    dnf:
+      name: steam
+      state: latest
+    when: fedora_workstation_repositories.rc == 1
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
     when: nouveau_grub.changed or iommu_grub.changed
     when: laptop
     register: runlevel3_enabled
+  - name: Set xorg.conf for nvidia changes
+    copy:
+      src: files/xorg.conf
+      dest: /etc/X11/xorg.conf
+      owner: root
+      group: root
+    when: runlevel3_enabled
+  - name: Update xinit.rc
+    copy:
+      src: files/.xinitrc
+      path: /home/{{ user }}/.xinitrc
+      line: "{{ item }}"
+      user: "{{ user }}"
+      group: "{{ user }}"
+    with_items:
+      - xrandr --setprovideroutputsource modesetting NVIDIA-0
+      - xrandr --auto
+    when: runlevel3_enabled.changed
   - debug:
-      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target"
+      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
     when: runlevel3_enabled.changed
