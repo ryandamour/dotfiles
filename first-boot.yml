@@ -65,3 +65,54 @@
       remote_src: yes
       owner: root
       group: root
+  - name: Install Nvidia Dependencies
+    dnf:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - "{{ nvidia_dependencies }}"
+    when: laptop
+  - name: Blacklist nouvuea
+    lineinfile:
+      path: /etc/modprobe.d/blacklist.conf
+      line: blacklist nouveau
+      state: present
+      insertafter: EOF
+  - name: Add grub blacklist for nouveau in grub
+    lineinfile:
+      state: present
+      dest: /etc/default/grub
+      backrefs: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rd.driver.blacklist=nouveau)\"[^\"]+)(\".*)'
+      line: '\1 rd.driver.blacklist=nouveau\2'
+    register: nouveau_grub
+    when: laptop
+  - name: Add IOMMU to grub
+    lineinfile:
+      state: present
+      dest: /etc/default/grub
+      backrefs: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*iommu=1 amd_iommu=on rd.driver.pre=vfio-pci)\"[^\"]+)(\".*)'
+      line: '\1 iommu=1 amd_iommu=on rd.driver.pre=vfio-pci\2'
+    register: iommu_grub
+    when: laptop
+  - name: Run grub2-mkconfig
+    command: grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+    when: nouveau_grub.changed or iommu_grub.changed
+  - name: Remove xorg-x11-drv-nouveau
+    dnf:
+      name: xorg-x11-drv-nouveau
+      state: absent
+    when: laptop
+# Not the most idempotent way of handling this, but can't seem to find a relevant uname fact to reference.
+  - name: Create new dracut initramfs image
+    shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
+    when: nouveau_grub.changed or iommu_grub.changed
+  - name: Drop to runlevel3 
+    command: systemctl set-default multi-user.target
+    when: nouveau_grub.changed or iommu_grub.changed
+    when: laptop
+    register: runlevel3_enabled
+  - debug:
+      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target"
+    when: runlevel3_enabled.changed
