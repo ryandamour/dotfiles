@@ -112,14 +112,10 @@
     dnf:
       name: fedora-workstation-repositories
       state: latest
-  - name: CHeck official unofficial 3rd party repo 
-    command: rpm -q fedora-workstation-repositories
-    register: fedora_workstation_repositories
   - name: Install steam
     dnf:
       name: steam
       state: latest
-    when: fedora_workstation_repositories.rc == 1
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
     when: nouveau_grub.changed or iommu_grub.changed
