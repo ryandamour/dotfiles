@@ -135,13 +135,9 @@
   - name: Update xinit.rc
     copy:
       src: files/.xinitrc
-      path: /home/{{ user }}/.xinitrc
-      line: "{{ item }}"
-      user: "{{ user }}"
+      dest: /home/{{ user }}/.xinitrc
+      owner: "{{ user }}"
       group: "{{ user }}"
-    with_items:
-      - xrandr --setprovideroutputsource modesetting NVIDIA-0
-      - xrandr --auto
     when: runlevel3_enabled.changed
   - debug:
       msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
