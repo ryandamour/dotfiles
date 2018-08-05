@@ -11,6 +11,12 @@
       name: "{{ item }}"
     with_items:
       - "{{ dependencies }}"
+  - name: Create .vim
+    file:
+      state: directory
+      path: /home/{{ user }}/.vim/
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Download dracula VIM
     get_url:
       url: "{{ dracula_url }}"
@@ -65,6 +71,12 @@
       remote_src: yes
       owner: root
       group: root
+  - name: Copy i3 config
+    copy:
+      src: config
+      dest: /home/{{ user }}/.config/i3/config 
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Install Nvidia Dependencies
     dnf:
       name: "{{ item }}"
@@ -78,6 +90,7 @@
       line: blacklist nouveau
       state: present
       insertafter: EOF
+      create: yes
   - name: Add grub blacklist for nouveau in grub
     lineinfile:
       state: present
@@ -108,14 +121,17 @@
   - name: Create new dracut initramfs image
     shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
     when: nouveau_grub.changed or iommu_grub.changed
-  - name: Enable official unofficial 3rd party repo
-    dnf:
-      name: fedora-workstation-repositories
-      state: latest
-  - name: Install steam
-    dnf:
-      name: steam
-      state: latest
+  - name: Flatpak install flathub 
+    flatpak_remote:
+      name: flathub
+      state: present
+      flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    become_user: "{{ user }}"
+  - name: Flatpak install steam
+    flatpak:
+      name: com.valvessoftware.Stream
+      state: present
+    become_user: "{{ user }}"
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
     when: nouveau_grub.changed or iommu_grub.changed

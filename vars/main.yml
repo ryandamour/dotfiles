@@ -13,13 +13,17 @@ dependencies:
   - firefox
   - ansible
   - wget
+  - xdg-utils
   - git
   - libvirt
+  - libappindicator-gtk3
+  - libXScrnSaver
   - virt-manager
   - qemu-kvm
   - kernel-devel
   - kernel-headers
   - docker
+  - redhat-lsb-core 
   - gcc
   - dkms
   - acpid
@@ -28,12 +32,14 @@ dependencies:
   - shutter
   - libreoffice
   - xorg-x11-drv-evdev
+  - xorg-x11-drv-libinput
   - xorg-x11-server-Xorg
   - xorg-x11-xinit
   - gcc
   - gcc-c++
   - polkit-gnome
   - network-manager-applet
+  - flatpak
 laptop_dependencies:
   - NetworkManager-wifi 
   - iwl7260-firmware
