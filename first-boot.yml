@@ -127,11 +127,18 @@
       state: present
       flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
     become_user: "{{ user }}"
+    when: laptop
   - name: Flatpak install steam
     flatpak:
       name: com.valvessoftware.Stream
       state: present
     become_user: "{{ user }}"
+    when: laptop
+  - name: Disable mouse acceleration
+    file:
+      src: files/01-mouse-acceleration.conf
+      dest: /etc/X11/xorg.conf.d/01-mouse-acceleration.conf
+    when: laptop
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
     when: nouveau_grub.changed or iommu_grub.changed
