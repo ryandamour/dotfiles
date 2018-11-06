@@ -71,6 +71,12 @@
       remote_src: yes
       owner: root
       group: root
+  - name: Create config directory
+    file:
+      path: /home/{{ user }}/.config/i3
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"      
   - name: Copy i3 config
     copy:
       src: config
@@ -126,16 +132,16 @@
       name: flathub
       state: present
       flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-    become_user: "{{ user }}"
+      method: user
     when: laptop
   - name: Flatpak install steam
     flatpak:
-      name: com.valvessoftware.Stream
+      name: com.valvesoftware.Steam
       state: present
-    become_user: "{{ user }}"
+      method: user
     when: laptop
   - name: Disable mouse acceleration
-    file:
+    copy:
       src: files/01-mouse-acceleration.conf
       dest: /etc/X11/xorg.conf.d/01-mouse-acceleration.conf
     when: laptop

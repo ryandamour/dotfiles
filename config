@@ -159,3 +159,4 @@ bar {
 exec --no-startup-id i3-msg 'exec /usr/bin/pulseaudio --start'
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1 &
 exec --no-startup-id /usr/bin/nm-applet
+exec --no-startup-id xset dpms 60
