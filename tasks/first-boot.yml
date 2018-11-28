@@ -4,7 +4,7 @@
   tasks:
   - name: Include vars
     include_vars:
-      dir: vars
+      dir: ../vars
   - name: Install Dependencies
     dnf:
       state: latest
@@ -23,6 +23,12 @@
       dest: /home/{{ user }}/.vim/colors
       owner: "{{ user }}"
       group: "{{ user }}"
+  - name: Copy .vimrc
+    copy:
+      src: ../files/.vimrc
+      dest: /home/{{ user }}/.vimrc
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Download pip3 apps 
     pip:
       name: "{{ item }}"
@@ -31,13 +37,13 @@
       - "{{ pip3_apps }}"
   - name: Copy Xdefaults
     copy:
-      src: .Xdefaults
+      src: ../files/.Xdefaults
       dest: /home/{{ user }}/.Xdefaults
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Copy i3 clipboard perl script
     copy:
-      src: clipboard
+      src: ../files/clipboard
       dest: /usr/lib64/urxvt/perl/clipboard
       owner: root
       group: root
@@ -79,7 +85,7 @@
       group: "{{ user }}"      
   - name: Copy i3 config
     copy:
-      src: config
+      src: ../files/config
       dest: /home/{{ user }}/.config/i3/config 
       owner: "{{ user }}"
       group: "{{ user }}"
@@ -134,36 +140,56 @@
       flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
       method: user
     when: laptop
+ # Using manual command, since flatpak module seems to break most of the time
   - name: Flatpak install steam
-    flatpak:
-      name: com.valvesoftware.Steam
-      state: present
-      method: user
+    command: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     when: laptop
+    become: "{{ user }}"
+  - name: Flatpak install steam
+    command: flatpak install -y --user flathub com.valvesoftware.Steam 
+    when: laptop
+    become: "{{ user }}"
   - name: Disable mouse acceleration
     copy:
-      src: files/01-mouse-acceleration.conf
+      src: ../files/01-mouse-acceleration.conf
       dest: /etc/X11/xorg.conf.d/01-mouse-acceleration.conf
     when: laptop
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
-    when: nouveau_grub.changed or iommu_grub.changed
-    when: laptop
+    when: nouveau_grub.changed and iommu_grub.changed and laptop
     register: runlevel3_enabled
   - name: Set xorg.conf for nvidia changes
     copy:
-      src: files/xorg.conf
+      src: ../files/xorg.conf
       dest: /etc/X11/xorg.conf
       owner: root
       group: root
     when: runlevel3_enabled
   - name: Update xinit.rc
     copy:
-      src: files/.xinitrc
+      src: ../files/.xinitrc
       dest: /home/{{ user }}/.xinitrc
       owner: "{{ user }}"
       group: "{{ user }}"
     when: runlevel3_enabled.changed
-  - debug:
-      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
+  - name: Download nvidia .run
+    get_url:
+      url: http://us.download.nvidia.com/XFree86/Linux-x86_64/{{ nvidia_version }}/NVIDIA-Linux-x86_64-{{ nvidia_version }}.run
+      dest: /home/{{ user }}/Downloads/
+      owner: "{{ user }}"
+      group: "{{ user }}"
     when: runlevel3_enabled.changed
+  - name: Add sudoers.d configs
+    template:
+      src: ../templates/{{ item }}.j2
+      dest: /etc/sudoers.d/{{ item }}
+      owner: root
+      group: root
+      mode: '0644'
+    with_items:
+      - "{{ sudoers_configs }}"
+  - debug:
+      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting (found in ~/Downloads.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
+    when: runlevel3_enabled.changed
+  - name: Build docker containers
+    include: containers.yml

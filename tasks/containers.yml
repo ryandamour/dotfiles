@@ -1,0 +1,21 @@
+---
+- name: Git clone containers repo
+  git:
+    repo: 'https://github.com/ryandamour/containers.git'
+    dest: /home/{{ user }}/containers
+- name: Build all docker images
+  docker_image:
+    path: /home/{{ user }}/containers/{{ item }}
+    name: "{{ item }}" 
+    tag: "{{ user }}"
+  with_items:
+    - "{{ containers }}"
+- name: Drop docker binaries
+  copy:
+    src: /home/{{ user }}/containers/services/{{ item }}
+    dest: /usr/bin/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ services }}"
