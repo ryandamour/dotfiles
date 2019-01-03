@@ -1,18 +1,50 @@
 ---
+- name: Install dnf-plugins-core
+  yum:
+    name: dnf-plugins-core
+    state: latest
+- name: Download docker ce repo
+  copy:
+    src: ../files/docker.repo
+    dest: /etc/yum.repos.d/docker.repo
+- name: Download docker ce
+  yum:
+    name: docker-ce
+    state: latest
+- name: Create /opt/kata/bin directory
+  file:
+    path: /opt/kata/bin
+    state: directory
+    owner: root
+    group: root
+- name: Download kata-fc
+  unarchive:
+    src: "{{ kata_fc_url }}" 
+    dest: /
+    remote_src: yes
+- name: Copy daemon.json
+  copy:
+    src: ../files/daemon.json
+    dest: /etc/docker/daemon.json
+  register: daemon
+- name: Restart docker
+  shell: systemctl daemon-reload && systemctl restart docker
+  when: daemon.changed
 - name: Git clone containers repo
   git:
-    repo: 'https://github.com/ryandamour/containers.git'
+    repo: 'ssh://git@github.com/ryandamour/containers.git'
     dest: /home/{{ user }}/containers
+    ssh_opts: "-o StrictHostKeyChecking=no"
 - name: Build all docker images
   docker_image:
     path: /home/{{ user }}/containers/{{ item }}
-    name: "{{ item }}" 
-    tag: "{{ user }}"
+    name: "{{ user }}" 
+    tag: "{{ item }}"
   with_items:
     - "{{ containers }}"
 - name: Drop docker binaries
-  copy:
-    src: /home/{{ user }}/containers/services/{{ item }}
+  template:
+    src: /home/{{ user }}/containers/services/{{ item }}.j2
     dest: /usr/bin/{{ item }}
     owner: root
     group: root

@@ -47,15 +47,6 @@
       dest: /usr/lib64/urxvt/perl/clipboard
       owner: root
       group: root
-  - name: Add exec i3 to .xinitrc
-    lineinfile:
-      path: /home/{{ user }}/.xinitrc
-      line: exec i3 
-      state: present
-      insertafter: EOF
-      owner: "{{ user }}"
-      group: "{{ user }}"
-      create: True
   - name: Install Laptop Dependencies
     dnf:
       name: "{{ item }}"
@@ -193,3 +184,11 @@
     when: runlevel3_enabled.changed
   - name: Build docker containers
     include: containers.yml
+  - name: Install Keybase
+    dnf:
+      name: 'https://prerelease.keybase.io/keybase_amd64.rpm'
+      state: latest
+    register: keybase_install
+  - name: run_keybase
+    command: run_keybase
+    when: keybase_install.changed
