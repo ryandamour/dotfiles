@@ -124,22 +124,6 @@
   - name: Create new dracut initramfs image
     shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
     when: nouveau_grub.changed or iommu_grub.changed
-  - name: Flatpak install flathub 
-    flatpak_remote:
-      name: flathub
-      state: present
-      flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      method: user
-    when: laptop
- # Using manual command, since flatpak module seems to break most of the time
-  - name: Flatpak install steam
-    command: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    when: laptop
-    become: "{{ user }}"
-  - name: Flatpak install steam
-    command: flatpak install -y --user flathub com.valvesoftware.Steam 
-    when: laptop
-    become: "{{ user }}"
   - name: Disable mouse acceleration
     copy:
       src: ../files/01-mouse-acceleration.conf
