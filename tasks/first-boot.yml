@@ -176,3 +176,20 @@
   - name: run_keybase
     command: run_keybase
     when: keybase_install.changed
+  - name: Oh My ZSH Pull
+    git:
+      repo: https://github.com/robbyrussell/oh-my-zsh
+      dest: "/home/{{ user }}/.oh-my-zsh"
+    become: false
+    register: zsh_clone
+  - name: Set ZSH shell
+    user:
+      name: "{{ user }}"
+      shell: /bin/zsh
+  - name: .zshrc copy
+    copy:
+      src: ../files/.zshrc
+      dest: "/home/{{ user }}/.zshrc"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+    when: zsh_clone

@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - zsh
   - pulseaudio
   - pavucontrol
   - transmission
@@ -49,7 +50,6 @@ packer_url: "https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd6
 vault_url: "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip"
 kata_fc_url: "https://github.com/kata-containers/runtime/releases/download/1.5.0-rc2/kata-fc-static-1.5.0-rc2-x86_64.tar.gz"
 pip3_apps: 
-  - hangups
   - docker-py
 nvidia_dependencies:
   - kernel-devel 
@@ -61,14 +61,16 @@ nvidia_dependencies:
   - libglvnd-opengl 
   - libglvnd-devel 
   - pkgconfig
-nvidia_version: "415.18"
+nvidia_version: "430.34"
 sudoers_configs: 
   - "01-containers"
 containers:
+  - lutris
   - slack
-  - chrome
+  - brave
   - packer 
 services:
+  - lutris
   - slack
-  - chrome
+  - brave
   - packer
