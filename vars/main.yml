@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - podman
   - zsh
   - pulseaudio
   - pavucontrol

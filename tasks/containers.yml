@@ -41,8 +41,8 @@
     dest: /home/{{ user }}/containers
     ssh_opts: "-o StrictHostKeyChecking=no"
   become: false
-- name: Build all docker images
-  docker_image:
+- name: Build all podman images
+  podman_image:
     path: /home/{{ user }}/containers/{{ item }}
     name: "{{ user }}" 
     tag: "{{ item }}"
