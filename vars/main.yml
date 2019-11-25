@@ -2,6 +2,7 @@
 dependencies:
   - podman
   - zsh
+  - gnupg
   - pulseaudio
   - pavucontrol
   - transmission
@@ -70,8 +71,12 @@ containers:
   - slack
   - brave
   - packer 
+  - hangups
+  - mutt
 services:
   - lutris
   - slack
   - brave
   - packer
+  - hangups
+  - mutt
