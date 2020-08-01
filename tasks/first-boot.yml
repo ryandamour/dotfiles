@@ -86,7 +86,6 @@
       state: latest
     with_items:
       - "{{ nvidia_dependencies }}"
-    when: laptop
   - name: Blacklist nouvuea
     lineinfile:
       path: /etc/modprobe.d/blacklist.conf
@@ -102,7 +101,6 @@
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rd.driver.blacklist=nouveau)\"[^\"]+)(\".*)'
       line: '\1 rd.driver.blacklist=nouveau\2'
     register: nouveau_grub
-    when: laptop
   - name: Add IOMMU to grub
     lineinfile:
       state: present
@@ -111,7 +109,6 @@
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.*iommu=1 amd_iommu=on rd.driver.pre=vfio-pci)\"[^\"]+)(\".*)'
       line: '\1 iommu=1 amd_iommu=on rd.driver.pre=vfio-pci\2'
     register: iommu_grub
-    when: laptop
   - name: Run grub2-mkconfig
     command: grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
     when: nouveau_grub.changed or iommu_grub.changed
@@ -119,7 +116,6 @@
     dnf:
       name: xorg-x11-drv-nouveau
       state: absent
-    when: laptop
 # Not the most idempotent way of handling this, but can't seem to find a relevant uname fact to reference.
   - name: Create new dracut initramfs image
     shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
@@ -128,10 +124,9 @@
     copy:
       src: ../files/01-mouse-acceleration.conf
       dest: /etc/X11/xorg.conf.d/01-mouse-acceleration.conf
-    when: laptop
   - name: Drop to runlevel3 
     command: systemctl set-default multi-user.target
-    when: nouveau_grub.changed and iommu_grub.changed and laptop
+    when: nouveau_grub.changed and iommu_grub.changed
     register: runlevel3_enabled
   - name: Set xorg.conf for nvidia changes
     copy:
@@ -166,16 +161,6 @@
   - debug:
       msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting (found in ~/Downloads.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
     when: runlevel3_enabled.changed
-  - name: Build docker containers
-    include: containers.yml
-  - name: Install Keybase
-    dnf:
-      name: 'https://prerelease.keybase.io/keybase_amd64.rpm'
-      state: latest
-    register: keybase_install
-  - name: run_keybase
-    command: run_keybase
-    when: keybase_install.changed
   - name: Oh My ZSH Pull
     git:
       repo: https://github.com/robbyrussell/oh-my-zsh
@@ -193,3 +178,29 @@
       owner: "{{ user }}"
       group: "{{ user }}"
     when: zsh_clone
+  - name: Build docker containers
+    include: containers.yml
+  - name: Install flathub
+    flatpak_remote:
+      name: flathub
+      state: present
+      flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+      method: user
+    become_user: "{{ user }}"
+  - name: Install Steam 
+    flatpak:
+      name: com.valvesoftware.Steam 
+      state: present
+      remote: flathub
+      method: user
+    become_user: "{{ user }}"
+  - name: Install Brave Repo
+    copy:
+      src: ../files/brave.repo
+      dest: /etc/yum.repos.d/brave.repo
+      owner: root
+      group: root
+  - name: Install Brave
+    dnf:
+      name: brave-browser
+      state: present

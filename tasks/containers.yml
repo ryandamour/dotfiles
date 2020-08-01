@@ -3,38 +3,12 @@
   yum:
     name: dnf-plugins-core
     state: latest
-- name: Download docker ce repo
-  copy:
-    src: ../files/docker.repo
-    dest: /etc/yum.repos.d/docker.repo
-- name: Download docker ce
+- name: Download podman 
   yum:
-    name: docker-ce
+    name: "{{ item }}" 
     state: latest
-    #- name: Create /opt/kata/bin directory
-    #  file:
-    #    path: /opt/kata/bin
-    #    state: directory
-    #    owner: root
-    #    group: root
-    #- name: Download kata-fc
-    #  unarchive:
-    #    src: "{{ kata_fc_url }}" 
-    #    dest: /
-    #    remote_src: yes
-    #- name: Copy daemon.json
-    #  copy:
-    #    src: ../files/daemon.json
-    #    dest: /etc/docker/daemon.json
-    #  register: daemon
-    #- name: Restart docker
-    #  shell: systemctl daemon-reload && systemctl restart docker
-    #  when: daemon.changed
-- name: Start docker service
-  service:
-    name: docker
-    state: started 
-    enabled: True
+  with_items:
+    - podman 
 - name: Git clone containers repo
   git:
     repo: 'ssh://git@github.com/ryandamour/containers.git'
@@ -48,10 +22,10 @@
     tag: "{{ item }}"
   with_items:
     - "{{ containers }}"
-- name: Drop docker binaries
+- name: Drop podman binaries
   template:
     src: /home/{{ user }}/containers/services/{{ item }}.j2
-    dest: /usr/bin/{{ item }}
+    dest: /usr/local/bin/{{ item }}
     owner: root
     group: root
     mode: 0755

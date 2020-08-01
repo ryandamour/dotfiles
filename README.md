@@ -1,9 +1,9 @@
 Current Setup:
 
-FC27
+FC32
 
 i3 + urxvt + Dracula theme
 
 Dracula Vim
 
-Nvidia / 4.10 kernel patch
+Nvidia / 4.50 kernel patch
