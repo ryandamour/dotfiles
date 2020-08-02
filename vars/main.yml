@@ -43,6 +43,7 @@ dependencies:
   - network-manager-applet
   - flatpak
   - wireguard-tools
+  - golang
 laptop_dependencies:
   - NetworkManager-wifi 
   - iwl7260-firmware

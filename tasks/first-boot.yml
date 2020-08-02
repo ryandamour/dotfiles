@@ -29,6 +29,10 @@
       dest: /home/{{ user }}/.vimrc
       owner: "{{ user }}"
       group: "{{ user }}"
+  - name: Copy .bashrc
+    copy:
+      src: ../files/.bashrc
+      dest: /home/{{ user }}/.bashrc
   - name: Download pip3 apps 
     pip:
       name: "{{ item }}"
