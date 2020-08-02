@@ -15,6 +15,19 @@
     dest: /home/{{ user }}/containers
     ssh_opts: "-o StrictHostKeyChecking=no"
   become: false
+- name: Create podman bridge network
+  copy:
+    src: ../files/87-podman-bridge.conflist
+    dest: /etc/cni/net.d/87-podman-bridge.conflist
+- name: Disable nftables
+  replace:
+    path: /etc/firewalld/firewalld.conf
+    regexp: 'FirewallBackend=nftables'
+    replace: 'FirewallBackend=iptables'
+- name: Restart firewalld
+  service:
+    name: firewalld
+    state: restarted
 - name: Build all podman images
   podman_image:
     path: /home/{{ user }}/containers/{{ item }}
