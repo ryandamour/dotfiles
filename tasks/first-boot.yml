@@ -191,13 +191,15 @@
       flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
       method: user
     become_user: "{{ user }}"
-  - name: Install Steam 
+  - name: Install Flatpaks 
     flatpak:
       name: com.valvesoftware.Steam 
       state: present
       remote: flathub
       method: user
     become_user: "{{ user }}"
+    with_items:
+      - "{{ flatpaks }}" 
   - name: Install Brave Repo
     copy:
       src: ../files/brave.repo

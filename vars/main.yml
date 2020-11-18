@@ -45,6 +45,8 @@ dependencies:
   - wireguard-tools
   - golang
   - glibc.i686
+  - vulkan-loader
+  - vulkan-loader.i686
 laptop_dependencies:
   - NetworkManager-wifi 
   - iwl7260-firmware
@@ -80,3 +82,7 @@ services:
   - slack
   - hangups
   - mutt
+flatpaks:
+  - com.valvesoftware.Steam
+  - com.discordapp.Discord
+  - org.gnome.Chess
