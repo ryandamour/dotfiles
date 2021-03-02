@@ -6,33 +6,32 @@
     include_vars:
       dir: ../vars
   - name: Install Dependencies
-    dnf:
-      state: latest
-      name: "{{ item }}"
+    shell: rpm-ostree install "{{ item }}"
     with_items:
       - "{{ dependencies }}"
+    ignore_errors: yes
   - name: Create .vim
     file:
       state: directory
-      path: /home/{{ user }}/.vim/
+      path: /var/home/{{ user }}/.vim/
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Download dracula VIM
     get_url:
       url: "{{ dracula_url }}"
-      dest: /home/{{ user }}/.vim/colors
+      dest: /var/home/{{ user }}/.vim/colors
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Copy .vimrc
     copy:
       src: ../files/.vimrc
-      dest: /home/{{ user }}/.vimrc
+      dest: /var/home/{{ user }}/.vimrc
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Copy .bashrc
     copy:
       src: ../files/.bashrc
-      dest: /home/{{ user }}/.bashrc
+      dest: /var/home/{{ user }}/.bashrc
   - name: Download pip3 apps 
     pip:
       name: "{{ item }}"
@@ -42,117 +41,76 @@
   - name: Copy Xdefaults
     copy:
       src: ../files/.Xdefaults
-      dest: /home/{{ user }}/.Xdefaults
+      dest: /var/home/{{ user }}/.Xdefaults
+      owner: "{{ user }}"
+      group: "{{ user }}"
+  - name: Create ~/.urxvt/ext directory
+    file:
+      path: /var/home/{{ user }}/.urxvt/ext
+      state: directory
+      recurse: yes
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Copy i3 clipboard perl script
     copy:
       src: ../files/clipboard
-      dest: /usr/lib64/urxvt/perl/clipboard
-      owner: root
-      group: root
+      dest: /var/home/{{ user }}/.urxvt/ext/clipboard
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Install Laptop Dependencies
-    dnf:
-      name: "{{ item }}"
-      state: latest
+    shell: rpm-ostree install "{{ item }}"
     with_items:
       - "{{ laptop_dependencies }}"
+    ignore_errors: yes
     when: laptop
-  - name: Install Packer
-    unarchive:
-      src: "{{ packer_url }}" 
-      dest: /usr/local/bin/
-      remote_src: yes
-      owner: root
-      group: root
-  - name: Install Terraform 
-    unarchive:
-      src: "{{ vault_url }}"
-      dest: /usr/local/bin
-      remote_src: yes
-      owner: root
-      group: root
   - name: Create config directory
     file:
-      path: /home/{{ user }}/.config/i3
+      path: /var/home/{{ user }}/.config/i3
       state: directory
       owner: "{{ user }}"
       group: "{{ user }}"      
   - name: Copy i3 config
     copy:
       src: ../files/config
-      dest: /home/{{ user }}/.config/i3/config 
+      dest: /var/home/{{ user }}/.config/i3/config 
       owner: "{{ user }}"
       group: "{{ user }}"
   - name: Install Nvidia Dependencies
-    dnf:
-      name: "{{ item }}"
-      state: latest
+    shell: rpm-ostree install "{{ item }}"
     with_items:
       - "{{ nvidia_dependencies }}"
-  - name: Blacklist nouvuea
-    lineinfile:
-      path: /etc/modprobe.d/blacklist.conf
-      line: blacklist nouveau
-      state: present
-      insertafter: EOF
-      create: yes
+    ignore_errors: yes
   - name: Add grub blacklist for nouveau in grub
-    lineinfile:
-      state: present
-      dest: /etc/default/grub
-      backrefs: yes
-      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*rd.driver.blacklist=nouveau)\"[^\"]+)(\".*)'
-      line: '\1 rd.driver.blacklist=nouveau\2'
+    shell: rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1
+    ignore_errors: yes
     register: nouveau_grub
   - name: Add IOMMU to grub
-    lineinfile:
-      state: present
-      dest: /etc/default/grub
-      backrefs: yes
-      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*iommu=1 amd_iommu=on rd.driver.pre=vfio-pci)\"[^\"]+)(\".*)'
-      line: '\1 iommu=1 amd_iommu=on rd.driver.pre=vfio-pci\2'
+    shell: rpm-ostree initramfs --enable --arg=--add-drivers --arg="vfio vfio-pci vfio_iommu_type1"
     register: iommu_grub
-  - name: Run grub2-mkconfig
-    command: grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-    when: nouveau_grub.changed or iommu_grub.changed
   - name: Remove xorg-x11-drv-nouveau
-    dnf:
-      name: xorg-x11-drv-nouveau
-      state: absent
+    shell: rpm-ostree uninstall org-x11-drv-nouveau
+    ignore_errors: yes
 # Not the most idempotent way of handling this, but can't seem to find a relevant uname fact to reference.
-  - name: Create new dracut initramfs image
-    shell: mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img && dracut /boot/initramfs-$(uname -r).img $(uname -r)
-    when: nouveau_grub.changed or iommu_grub.changed
   - name: Disable mouse acceleration
     copy:
       src: ../files/01-mouse-acceleration.conf
       dest: /etc/X11/xorg.conf.d/01-mouse-acceleration.conf
-  - name: Drop to runlevel3 
-    command: systemctl set-default multi-user.target
-    when: nouveau_grub.changed and iommu_grub.changed
-    register: runlevel3_enabled
   - name: Set xorg.conf for nvidia changes
     copy:
       src: ../files/xorg.conf
       dest: /etc/X11/xorg.conf
       owner: root
       group: root
-    when: runlevel3_enabled
+    when: nouveau_grub.changed 
   - name: Update xinit.rc
     copy:
       src: ../files/.xinitrc
-      dest: /home/{{ user }}/.xinitrc
+      dest: /var/home/{{ user }}/.xinitrc
       owner: "{{ user }}"
       group: "{{ user }}"
-    when: runlevel3_enabled.changed
-  - name: Download nvidia .run
-    get_url:
-      url: http://us.download.nvidia.com/XFree86/Linux-x86_64/{{ nvidia_version }}/NVIDIA-Linux-x86_64-{{ nvidia_version }}.run
-      dest: /home/{{ user }}/Downloads/
-      owner: "{{ user }}"
-      group: "{{ user }}"
-    when: runlevel3_enabled.changed
+    when: nouveau_grub.changed 
+  - name: Install rpmfusion
+    shell: rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E $fedora).noarch.rpm
   - name: Add sudoers.d configs
     template:
       src: ../templates/{{ item }}.j2
@@ -162,13 +120,10 @@
       mode: '0644'
     with_items:
       - "{{ sudoers_configs }}"
-  - debug:
-      msg: "Multi-user.target runtime has been enabled at default.  Make sure the Nvidia installer is present before rebooting (found in ~/Downloads.  Once reboot and Nvidia install is complete, set default runtime back to graphical.target.  Also, make sure to _NOT_ allow the nvidia installer to populate the xorg.conf, as that has already been done."
-    when: runlevel3_enabled.changed
   - name: Oh My ZSH Pull
     git:
       repo: https://github.com/robbyrussell/oh-my-zsh
-      dest: "/home/{{ user }}/.oh-my-zsh"
+      dest: "/var/home/{{ user }}/.oh-my-zsh"
     become: false
     register: zsh_clone
   - name: Set ZSH shell
@@ -178,12 +133,10 @@
   - name: .zshrc copy
     copy:
       src: ../files/.zshrc
-      dest: "/home/{{ user }}/.zshrc"
+      dest: "/var/home/{{ user }}/.zshrc"
       owner: "{{ user }}"
       group: "{{ user }}"
     when: zsh_clone
-  - name: Build docker containers
-    include: containers.yml
   - name: Install flathub
     flatpak_remote:
       name: flathub
@@ -200,13 +153,3 @@
     become_user: "{{ user }}"
     with_items:
       - "{{ flatpaks }}" 
-  - name: Install Brave Repo
-    copy:
-      src: ../files/brave.repo
-      dest: /etc/yum.repos.d/brave.repo
-      owner: root
-      group: root
-  - name: Install Brave
-    dnf:
-      name: brave-browser
-      state: present
