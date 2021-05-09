@@ -156,7 +156,9 @@ bar {
 }
 
 # Start pulseaudio on i3 boot
-exec --no-startup-id i3-msg 'exec /usr/bin/pulseaudio --start'
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1 &
 exec --no-startup-id /usr/bin/nm-applet
 exec --no-startup-id xset dpms 60
+exec --no-startup-id xinput --set-prop 19 'libinput Accel Speed' -0.5
+exec --no-startup-id xinput --set-prop 25 'libinput Accel Speed' -0.5
+exec --no-startup-id i3-msg 'exec /usr/bin/pulseaudio --start'
