@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - xinput
   - podman
   - zsh
   - gnupg
@@ -80,9 +81,12 @@ containers:
   - mutt
 services:
   - slack
-  - hangups
-  - mutt
+  - discord 
+  - steam
+  - spotify
 flatpaks:
   - com.valvesoftware.Steam
   - com.discordapp.Discord
   - org.gnome.Chess
+  - com.spotify.Client
+  - com.slack.Slack

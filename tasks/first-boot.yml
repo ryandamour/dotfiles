@@ -110,7 +110,8 @@
       group: "{{ user }}"
     when: nouveau_grub.changed 
   - name: Install rpmfusion
-    shell: rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E $fedora).noarch.rpm
+    shell: rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    ignore_errors: yes
   - name: Add sudoers.d configs
     template:
       src: ../templates/{{ item }}.j2
@@ -146,10 +147,25 @@
     become_user: "{{ user }}"
   - name: Install Flatpaks 
     flatpak:
-      name: com.valvesoftware.Steam 
+      name: "{{ item }}"
       state: present
       remote: flathub
       method: user
     become_user: "{{ user }}"
     with_items:
       - "{{ flatpaks }}" 
+  - name: Create bin
+    file:
+      path: /var/home/{{ user }}/bin
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"
+  - name: Drop services for dmenu 
+    template:
+      src: ../files/services/{{ item }}
+      dest: /var/home/{{ user }}/bin/{{ item }}
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0700
+    with_items:
+      - "{{ services }}"
