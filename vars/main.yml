@@ -84,9 +84,12 @@ services:
   - discord 
   - steam
   - spotify
+  - weechat
+  - workspaces
 flatpaks:
   - com.valvesoftware.Steam
   - com.discordapp.Discord
   - org.gnome.Chess
   - com.spotify.Client
   - com.slack.Slack
+  - com.amazon.Workspaces
