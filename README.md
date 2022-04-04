@@ -1,9 +1,7 @@
 Current Setup:
 
-FC32
+FC35 SilverBlue
 
 i3 + urxvt + Dracula theme
 
-Dracula Vim
-
-Nvidia / 4.50 kernel patch
+Dracula NeoVim
