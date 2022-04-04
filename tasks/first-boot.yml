@@ -138,6 +138,20 @@
       owner: "{{ user }}"
       group: "{{ user }}"
     when: zsh_clone
+  - name: ZSH auto suggestion pull
+    git:
+      repo: https://github.com/zsh-users/zsh-autosuggestions.git
+      dest: "/var/home/{{ user }}/.oh-my-zsh"
+      dest: "/home/hac/{{ user }}/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    become: false
+    when: zsh_clone
+  - name: Fix zsh perms
+    file:
+      path: /var/home/{{ user }}/.oh-my-zsh
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      recurse: yes
   - name: Install flathub
     flatpak_remote:
       name: flathub
@@ -169,3 +183,40 @@
       mode: 0700
     with_items:
       - "{{ services }}"
+
+    - name: Install neovim
+      shell: rpm-ostree install neovim 
+      ignore_errors: yes
+
+    - name: Create neovim directory for autoloading configurations
+      file:
+        path: "/var/home/{{ user }}/.local/share/nvim/site/autoload/"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        recurse: yes
+        mode: 0o700
+
+    - name: Install vim-plug
+      get_url:
+        url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        dest: "/var/home/{{ user }}/.local/share/nvim/site/autoload/plug.vim"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: 0o600
+
+    - name: Create base directory for configurations of neovim
+      file:
+        path: "/var/home/{{ user }}/.config/nvim"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        state: directory
+        mode: 0o700
+
+    - name: Configure neovim
+      template:
+        src: ../templates/init.vim
+        dest: "/var/home/{{ user }}/.config/nvim"
+        mode: 0o600
+        owner: "{{ user }}"
+        group: "{{ user }}"

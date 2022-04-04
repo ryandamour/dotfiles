@@ -86,6 +86,7 @@ services:
   - spotify
   - weechat
   - workspaces
+  - code
 flatpaks:
   - com.valvesoftware.Steam
   - com.discordapp.Discord
@@ -93,3 +94,58 @@ flatpaks:
   - com.spotify.Client
   - com.slack.Slack
   - com.amazon.Workspaces
+  - com.visualstudio.code
+neovim_plugins:
+  - "dracula/vim"
+  - "neovim/nvim-lspconfig"
+  - "williamboman/nvim-lsp-installer"
+neovim_configuration: |
+  colorscheme dracula
+  set termguicolors
+  scriptencoding utf-8
+  set encoding=utf-8
+  "----------------------------------------------------------------------
+  " Basic Options
+  "----------------------------------------------------------------------
+  let mapleader=";"         " The <leader> key
+  set autoread              " Reload files that have not been modified
+  set backspace=2           " Makes backspace behave like you'd expect
+  set hidden                " Allow buffers to be backgrounded without being saved
+  set laststatus=2          " Always show the status bar
+  set list                  " Show invisible characters
+  set listchars=tab:›\ ,eol:¬,trail:⋅ "Set the characters for the invisibles
+  set number
+  set ruler                 " Show the line number and column in the status bar
+  set t_Co=256              " Use 256 colors
+  set scrolloff=999         " Keep the cursor centered in the screen
+  set showmatch             " Highlight matching braces
+  set showmode              " Show the current mode on the open buffer
+  set title                 " Set the title for gvim
+
+  " Customize session options. Namely, I don't want to save hidden and
+  " unloaded buffers or empty windows.
+  set sessionoptions="curdir,folds,help,options,tabpages,winsize"
+
+  syntax on                 " Enable filetype detection by syntax
+
+  " Search settings
+  set hlsearch   " Highlight results
+  set ignorecase " Ignore casing of searches
+  set incsearch  " Start showing results as you type
+  set smartcase  " Be smart about case sensitivity when searching
+
+  " Tab settings
+  set expandtab     " Expand tabs to the proper type and size
+  set tabstop=4     " Tabs width in spaces
+  set softtabstop=4 " Soft tab width in spaces
+  set shiftwidth=4  " Amount of spaces when shifting
+
+  " Tab completion settings
+  set wildmode=list:longest     " Wildcard matches show a list, matching the longest first
+  set wildignore+=.git,.hg,.svn " Ignore version control repos
+  set wildignore+=*.6           " Ignore Go compiled files
+  set wildignore+=*.pyc         " Ignore Python compiled files
+  set wildignore+=*.rbc         " Ignore Rubinius compiled files
+  set wildignore+=*.swp         " Ignore vim backups
+
+
