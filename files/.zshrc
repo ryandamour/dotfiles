@@ -16,6 +16,11 @@ alias vagrant='sudo podman run --rm -it \
         localhost/vagrant-container:latest'
 
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.cargo/bin
+export PATH=$PATH:~/bin/
+export GOPATH=$HOME/go
+export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock
 
 source $ZSH/oh-my-zsh.sh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -141,8 +141,7 @@
   - name: ZSH auto suggestion pull
     git:
       repo: https://github.com/zsh-users/zsh-autosuggestions.git
-      dest: "/var/home/{{ user }}/.oh-my-zsh"
-      dest: "/home/hac/{{ user }}/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+      dest: "/home/hac/{{ user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
     become: false
     when: zsh_clone
   - name: Fix zsh perms
