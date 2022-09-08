@@ -28,6 +28,12 @@
       dest: /var/home/{{ user }}/.vimrc
       owner: "{{ user }}"
       group: "{{ user }}"
+  - name: Copy fonts
+    copy:
+      src: ../files/fonts/
+      dest: /var/home/{{ user }}/.local/share/fonts/
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Copy .bashrc
     copy:
       src: ../files/.bashrc
