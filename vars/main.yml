@@ -2,6 +2,7 @@
 dependencies:
   - xinput
   - podman
+  - containernetworking-plugins
   - zsh
   - gnupg
   - pulseaudio
