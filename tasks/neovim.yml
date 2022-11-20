@@ -36,8 +36,8 @@
         mode: 0o700
 
     - name: Configure neovim
-      template:
-        src: ../templates/init.vim
+      file:
+        src: ../files/init.vim
         dest: "/var/home/{{ user }}/.config/nvim"
         mode: 0o600
         owner: "{{ user }}"

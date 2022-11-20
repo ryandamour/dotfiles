@@ -19,6 +19,7 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/bin/
+export PATH=$PATH:~/go/bin/
 export GOPATH=$HOME/go
 export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock
 
