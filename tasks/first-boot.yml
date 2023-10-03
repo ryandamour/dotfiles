@@ -38,12 +38,12 @@
     copy:
       src: ../files/.bashrc
       dest: /var/home/{{ user }}/.bashrc
-  - name: Download pip3 apps 
-    pip:
-      name: "{{ item }}"
-      executable: pip3
-    with_items:
-      - "{{ pip3_apps }}"
+#  - name: Download pip3 apps 
+#    pip:
+#      name: "{{ item }}"
+#      executable: pip3
+#    with_items:
+#      - "{{ pip3_apps }}"
   - name: Copy Xdefaults
     copy:
       src: ../files/.Xdefaults
@@ -94,7 +94,7 @@
     shell: rpm-ostree initramfs --enable --arg=--add-drivers --arg="vfio vfio-pci vfio_iommu_type1"
     register: iommu_grub
   - name: Remove xorg-x11-drv-nouveau
-    shell: rpm-ostree uninstall org-x11-drv-nouveau
+    shell: rpm-ostree override remove org-x11-drv-nouveau
     ignore_errors: yes
 # Not the most idempotent way of handling this, but can't seem to find a relevant uname fact to reference.
   - name: Disable mouse acceleration
@@ -147,7 +147,7 @@
   - name: ZSH auto suggestion pull
     git:
       repo: https://github.com/zsh-users/zsh-autosuggestions.git
-      dest: "/home/hac/{{ user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+      dest: "/home/{{ user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions/"
     become: false
     when: zsh_clone
   - name: Fix zsh perms
@@ -189,39 +189,39 @@
     with_items:
       - "{{ services }}"
 
-    - name: Install neovim
-      shell: rpm-ostree install neovim 
-      ignore_errors: yes
+  - name: Install neovim
+    shell: rpm-ostree install neovim 
+    ignore_errors: yes
 
-    - name: Create neovim directory for autoloading configurations
-      file:
-        path: "/var/home/{{ user }}/.local/share/nvim/site/autoload/"
-        state: directory
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        recurse: yes
-        mode: 0o700
+  - name: Create neovim directory for autoloading configurations
+    file:
+      path: "/var/home/{{ user }}/.local/share/nvim/site/autoload/"
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      recurse: yes
+      mode: 0o700
 
-    - name: Install vim-plug
-      get_url:
-        url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        dest: "/var/home/{{ user }}/.local/share/nvim/site/autoload/plug.vim"
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        mode: 0o600
+  - name: Install vim-plug
+    get_url:
+      url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      dest: "/var/home/{{ user }}/.local/share/nvim/site/autoload/plug.vim"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0o600
 
-    - name: Create base directory for configurations of neovim
-      file:
-        path: "/var/home/{{ user }}/.config/nvim"
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        state: directory
-        mode: 0o700
+  - name: Create base directory for configurations of neovim
+    file:
+      path: "/var/home/{{ user }}/.config/nvim"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      state: directory
+      mode: 0o700
 
-    - name: Configure neovim
-      template:
-        src: ../templates/init.vim
-        dest: "/var/home/{{ user }}/.config/nvim"
-        mode: 0o600
-        owner: "{{ user }}"
-        group: "{{ user }}"
+  - name: Configure neovim
+    copy:
+      src: ../files/init.vim
+      dest: "/var/home/{{ user }}/.config/nvim"
+      mode: 0o600
+      owner: "{{ user }}"
+      group: "{{ user }}"
