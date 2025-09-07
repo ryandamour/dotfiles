@@ -7,3 +7,4 @@ flatpaks:
   - com.visualstudio.code
   - com.spotify.Client
   - org.gimp.GIMP
+  - com.calibre_ebook.calibre
