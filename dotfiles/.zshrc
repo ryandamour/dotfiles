@@ -1,6 +1,6 @@
 export ZSH="/var/home/hac/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git)
+plugins=(git zsh-autosuggestions)
 
 alias docker="podman"
 alias vi="nvim"
