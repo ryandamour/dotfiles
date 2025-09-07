@@ -35,4 +35,3 @@ dependencies:
   - flatpak
   - gstreamer1-plugins-bad-free-extras 
   - gstreamer1-vaapi
-  - jetbrains-mono-fonts-all # font

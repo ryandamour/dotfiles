@@ -8,12 +8,11 @@ opacity = 0.97
 
 [font]
 # If you installed a Nerd Font, prefer that for Powerlevel10k glyphs:
-# normal.family = "JetBrainsMono Nerd Font"
-normal.family = "JetBrainsMono Nerd Font"
+normal.family = "JetBrains Mono Nerd Font"
 normal.style = "Regular"
-bold.family = "JetBrainsMono Nerd Font"
+bold.family = "JetBrains Mono Nerd Font"
 bold.style = "Bold"
-italic.family = "JetBrainsMono Nerd Font"
+italic.family = "JetBrains Mono Nerd Font"
 italic.style = "Italic"
 size = 11.0
 
@@ -82,13 +81,16 @@ mods = "Control|Shift"
 action = "SpawnNewInstance"
 
 [[keyboard.bindings]]
-key = "U"
-mods = "Control|Shift"
-action = "HintUrl"
+key = "Key0"
+mods = "Control"
+action = "ResetFontSize"
 
 [[keyboard.bindings]]
-key = "Key0"; mods = "Control"; action = "ResetFontSize"
+key = "Equals"
+mods = "Control"
+action = "IncreaseFontSize"
+
 [[keyboard.bindings]]
-key = "Equals"; mods = "Control"; action = "IncreaseFontSize"
-[[keyboard.bindings]]
-key = "Minus"; mods = "Control"; action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+action = "DecreaseFontSize"

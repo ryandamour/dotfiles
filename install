@@ -565,10 +565,19 @@ set_shell_zsh() {
 }
 
 install_vscode_flatpak_integration() {
-  git clone https://github.com/owtaylor/toolbox-vscode.git
-  cd toolbox-vscode
+  mkdir -p ~/Code
+  git clone --depth=1 https://github.com/owtaylor/toolbox-vscode.git ~/Code/toolbox-vscode 
+  cd ~/Code/toolbox-vscode
   [ -d ~/.local/bin ] || mkdir ~/.local/bin
   ln -s "$PWD/code.sh" ~/.local/bin/code
+}
+
+install_fonts() {
+  mkdir -p ~/.local/share/fonts/NerdFonts
+  cd ~/.local/share/fonts/NerdFonts
+  curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+  unzip -o JetBrainsMono.zip
+  fc-cache -f
 }
 
 # --- Parse flags --------------------------------------------------------------
@@ -709,5 +718,7 @@ fi
 set_shell_zsh
 
 install_vscode_flatpak_integration
+
+install_fonts
 
 log "Bootstrap complete."

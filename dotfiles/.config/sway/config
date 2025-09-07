@@ -160,7 +160,6 @@ bindsym $mod+r mode "resize"
 # --- Lock screen / idle ---
 # Simple lock (solid color background); swap -c for --image if you prefer
 set $locker swaylock -f -c 1e1e2e
-bindsym $mod+Shift+l exec $locker
 
 # Idle: lock after 5m, turn off displays after 10m, relight on input, lock before sleep
 exec_always --no-startup-id swayidle -w \
