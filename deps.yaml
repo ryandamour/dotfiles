@@ -35,3 +35,4 @@ dependencies:
   - flatpak
   - gstreamer1-plugins-bad-free-extras 
   - gstreamer1-vaapi
+  - slurp
