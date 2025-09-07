@@ -1,2 +1,0 @@
-alias steam="flatpak run com.valvesoftware.Steam"
-alias discord="flatpak run com.discordapp.Discord"

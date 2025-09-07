@@ -1,0 +1,94 @@
+# ~/.config/alacritty/alacritty.toml
+
+[window]
+padding = { x = 6, y = 6 }
+dynamic_padding = true
+decorations = "full"
+opacity = 0.97
+
+[font]
+# If you installed a Nerd Font, prefer that for Powerlevel10k glyphs:
+# normal.family = "JetBrainsMono Nerd Font"
+normal.family = "JetBrainsMono Nerd Font"
+normal.style = "Regular"
+bold.family = "JetBrainsMono Nerd Font"
+bold.style = "Bold"
+italic.family = "JetBrainsMono Nerd Font"
+italic.style = "Italic"
+size = 11.0
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+thickness = 0.15
+
+# Dracula theme
+[colors.primary]
+background = "#282a36"
+foreground = "#f8f8f2"
+
+[colors.cursor]
+text = "#282a36"
+cursor = "#f8f8f2"
+
+[colors.normal]
+black   = "#21222c"
+red     = "#ff5555"
+green   = "#50fa7b"
+yellow  = "#f1fa8c"
+blue    = "#bd93f9"
+magenta = "#ff79c6"
+cyan    = "#8be9fd"
+white   = "#f8f8f2"
+
+[colors.bright]
+black   = "#6272a4"
+red     = "#ff6e6e"
+green   = "#69ff94"
+yellow  = "#ffffa5"
+blue    = "#d6acff"
+magenta = "#ff92df"
+cyan    = "#a4ffff"
+white   = "#ffffff"
+
+[bell]
+animation = "Linear"
+duration = 0
+
+[mouse]
+hide_when_typing = true
+
+# Handy keybindings (Wayland-friendly)
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Control|Shift"
+action = "SpawnNewInstance"
+
+[[keyboard.bindings]]
+key = "U"
+mods = "Control|Shift"
+action = "HintUrl"
+
+[[keyboard.bindings]]
+key = "Key0"; mods = "Control"; action = "ResetFontSize"
+[[keyboard.bindings]]
+key = "Equals"; mods = "Control"; action = "IncreaseFontSize"
+[[keyboard.bindings]]
+key = "Minus"; mods = "Control"; action = "DecreaseFontSize"

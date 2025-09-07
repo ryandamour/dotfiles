@@ -1,0 +1,4 @@
+#!/bin/bash
+# Stashing dependencies for toolbox here.  Might only need zsh?
+
+sudo dnf install zsh

@@ -1,8 +1,0 @@
-{
-  "runtimes": {
-    "kata": {
-      "path": "/opt/kata/bin/kata-runtime"
-    }
-  },
-  "storage-driver": "devicemapper"
-}

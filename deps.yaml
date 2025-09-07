@@ -1,0 +1,38 @@
+--
+dependencies:
+  - neovim
+  - alacritty
+  - xinput
+  - podman
+  - containernetworking-plugins
+  - zsh
+  - gnupg2
+  - pavucontrol
+  - alsa-plugins-pulseaudio
+  - transmission
+  - xclip
+  - openssh-askpass
+  - patch
+  - sway 
+  - swaybg
+  - swayidle
+  - swaylock
+  - waybar
+  - bemenu
+  - firefox
+  - wget2
+  - xdg-utils
+  - git
+  - libvirt
+  - libappindicator-gtk3
+  - libXScrnSaver
+  - virt-manager
+  - qemu-kvm
+  - dkms
+  - acpid
+  - libreoffice
+  - network-manager-applet
+  - flatpak
+  - gstreamer1-plugins-bad-free-extras 
+  - gstreamer1-vaapi
+  - jetbrains-mono-fonts-all # font

@@ -1,0 +1,9 @@
+flatpaks:
+  - com.github.tchx84.Flatseal
+  - org.mozilla.firefox
+  - com.google.Chrome
+  - com.discordapp.Discord
+  - org.signal.Signal
+  - com.visualstudio.code
+  - com.spotify.Client
+  - org.gimp.GIMP
