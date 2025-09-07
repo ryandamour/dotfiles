@@ -25,7 +25,6 @@ export GOPATH=$HOME/go
 export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock
 
 source $ZSH/oh-my-zsh.sh
-source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
