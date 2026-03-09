@@ -1,0 +1,9 @@
+FROM registry.fedoraproject.org/fedora:42
+RUN dnf install -y \
+      openssh-clients \
+      vagrant \
+      vagrant-libvirt \
+      libvirt-devel \
+      rsync \
+    && dnf clean all
+CMD ["/bin/bash"]

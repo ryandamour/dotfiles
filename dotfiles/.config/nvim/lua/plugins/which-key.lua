@@ -1,0 +1,40 @@
+return {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = {
+    preset = "helix",
+    triggers = {
+      { "<leader>", mode = { "n", "v" } },
+      { "<C-w>", mode = { "n" } },
+      { "g", mode = { "n", "v" } },
+      { "z", mode = { "n" } },
+      { "[", mode = { "n" } },
+      { "]", mode = { "n" } },
+      { "\"", mode = { "n" } },
+    },
+    win = {
+      border = "rounded",
+      title = true,
+      title_pos = "center",
+    },
+    icons = {
+      mappings = false,
+      breadcrumb = "»",
+      separator = "→",
+      group = "+",
+    },
+    spec = {
+      { "<leader>a", group = "AI" },
+      { "<leader>f", group = "Find" },
+      { "<leader>g", group = "Git" },
+      { "<leader>r", group = "Rename" },
+      { "<leader>c", group = "Code" },
+      { "<C-w>", group = "Windows" },
+      { "g", group = "Goto" },
+      { "z", group = "Folds/Scroll" },
+      { "[", group = "Prev" },
+      { "]", group = "Next" },
+      { "\"", group = "Registers" },
+    },
+  },
+}

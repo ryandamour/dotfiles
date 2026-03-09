@@ -1,10 +1,12 @@
 --
 dependencies:
   - neovim
-  - alacritty
+  - ghostty
   - xinput
   - podman
+  - podman-compose
   - containernetworking-plugins
+  - tmux
   - zsh
   - gnupg2
   - pavucontrol
@@ -13,12 +15,13 @@ dependencies:
   - xclip
   - openssh-askpass
   - patch
-  - sway 
+  - sway
   - swaybg
   - swayidle
   - swaylock
   - waybar
   - bemenu
+  - j4-dmenu-desktop
   - firefox
   - wget2
   - xdg-utils
@@ -33,6 +36,6 @@ dependencies:
   - libreoffice
   - network-manager-applet
   - flatpak
-  - gstreamer1-plugins-bad-free-extras 
+  - gstreamer1-plugins-bad-free-extras
   - gstreamer1-vaapi
   - slurp

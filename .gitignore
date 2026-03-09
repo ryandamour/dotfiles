@@ -1,0 +1,7 @@
+packer/output/
+packer/build/
+packer/packer_cache/
+packer/serial.log
+*.box
+.vagrant/
+test/*.tmp
