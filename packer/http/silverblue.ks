@@ -1,4 +1,4 @@
-# Kickstart for Fedora Silverblue 42 — Vagrant base box
+# Kickstart for Fedora Sway Atomic 42 — Vagrant base box
 # Unattended install via ostreecontainer (modern approach, no %packages)
 
 # System language and keyboard
@@ -24,8 +24,8 @@ autopart --type=plain --nohome
 # Bootloader — console=ttyS0 so Packer can see output
 bootloader --append="console=ttyS0,115200n8 console=tty0"
 
-# Install source — Silverblue via ostreecontainer
-ostreecontainer --url=quay.io/fedora/fedora-silverblue:42
+# Install source — Sway Atomic via ostreecontainer
+ostreecontainer --url=quay.io/fedora-ostree-desktops/sericea:42
 
 # Reboot after install
 reboot

@@ -44,11 +44,8 @@ bindsym $mod+Return exec ghostty
 # kill focused window
 bindsym Mod1+F4 kill
 
-# There also is the (new) i3-dmenu-desktop which only displays applications
-bindsym Mod1+space exec env BEMENU_BACKEND=wayland j4-dmenu-desktop --dmenu='bemenu -p "run: " --fn "JetBrains Mono 11"' --term='ghostty'
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+# Application launcher (rofi — ships with Sway Atomic)
+bindsym Mod1+space exec rofi -show drun -font "JetBrains Mono 11" -terminal ghostty
 
 # change focus
 bindsym $mod+a focus left

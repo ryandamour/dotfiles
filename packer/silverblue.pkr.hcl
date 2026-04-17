@@ -13,12 +13,12 @@ packer {
 
 variable "iso_url" {
   type    = string
-  default = "https://download.fedoraproject.org/pub/fedora/linux/releases/42/Silverblue/x86_64/iso/Fedora-Silverblue-ostree-x86_64-42-1.1.iso"
+  default = "https://download.fedoraproject.org/pub/fedora/linux/releases/42/Sericea/x86_64/iso/Fedora-Sericea-ostree-x86_64-42-1.1.iso"
 }
 
 variable "iso_checksum" {
   type    = string
-  default = "file:https://download.fedoraproject.org/pub/fedora/linux/releases/42/Silverblue/x86_64/iso/Fedora-Silverblue-42-1.1-x86_64-CHECKSUM"
+  default = "file:https://download.fedoraproject.org/pub/fedora/linux/releases/42/Sericea/x86_64/iso/Fedora-Sericea-42-1.1-x86_64-CHECKSUM"
 }
 
 source "qemu" "silverblue" {
