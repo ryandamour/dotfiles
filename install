@@ -54,6 +54,7 @@ OHMYZSH_PLUGINS="git,zsh-autosuggestions"
 FORCE_OHMYZSH=false
 FLATPAK_FILE="flatpak.yaml"
 FLATPAK_SCOPE="user"
+TERRAFORM_VERSION="1.9.8"
 
 # --- Parse flags --------------------------------------------------------------
 while (( "$#" )); do
@@ -72,6 +73,7 @@ while (( "$#" )); do
     --force-ohmyzsh)    FORCE_OHMYZSH=true; shift ;;
     --laptop)           LAPTOP=true; shift ;;
     --laptop-deps)      LAPTOP_DEPS_FILE="${2:?}"; shift 2 ;;
+    --terraform-version) TERRAFORM_VERSION="${2:?}"; shift 2 ;;
     --dry-run)          DRY_RUN=true; shift ;;
     -h|--help)
       sed -n '1,25p' "$0"; exit 0 ;;
@@ -214,5 +216,7 @@ fi
 set_shell_zsh
 install_vscode_flatpak_integration
 install_fonts
+bootstrap_rofi
+install_user_bins
 
 log "Bootstrap complete."

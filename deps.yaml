@@ -32,3 +32,9 @@ dependencies:
   - gstreamer1-plugins-bad-free-extras
   - gstreamer1-vaapi
   - slurp
+  - sway
+  - swaybg
+  - swayidle
+  - swaylock
+  - waybar
+  - rofi
